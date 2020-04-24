@@ -45,15 +45,16 @@ from sklearn.svm import LinearSVC, SVC
 from sklearn.model_selection import GridSearchCV
 
 search_params = [{
-'C' : np.linspace(0.1,10,80),
+'C' : np.linspace(0.00001,4,80),
 'random_state' : [1] ,
 }]
 
 model = LinearSVC()
-gs = GridSearchCV(model, search_params, cv=3, verbose=1,)
+gs = GridSearchCV(model, search_params, cv=5, verbose=1,)
 gs.fit(train_X, train_Y)
 print('best_score:',gs.best_score_)
 print('best estimater:', gs.best_estimator_)
+print('valid score:',gs.best_estimator_.score(valid_X, valid_Y))
 test_Y = gs.best_estimator_.predict(test_X)
 submission = pd.DataFrame({'PassengerId': test_pre['PassengerId'], 'Survived': test_Y})
 submission.to_csv('../data/output/LinearSVM.csv', index=False)
